@@ -1,17 +1,33 @@
 {
-  "name": "npm-tweets-count",
+  "name": "emoji-tweet-counts",
   "version": "1.0.0",
-  "description": "",
+  "description": "Display tweet counts by emoji this past week.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "bin": {
+    "emoji-tweet-counts": "./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mami-inuzuka/emoji-tweet-counts.git"
+  },
+  "keywords": [
+    "emoji",
+    "tweet",
+    "twitter",
+    "cli"
+  ],
+  "author": "inuzuka_mami",
+  "license": "MIT",
   "dependencies": {
     "luxon": "^2.0.2",
     "needle": "^3.0.0",
     "prompts": "^2.4.1"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/mami-inuzuka/emoji-tweet-counts/issues"
+  },
+  "homepage": "https://github.com/mami-inuzuka/emoji-tweet-counts/#readme"
 }
