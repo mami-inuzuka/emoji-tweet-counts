@@ -1,5 +1,5 @@
-const needle = require('needle')
 const { DateTime } = require('luxon')
+const needle = require('needle')
 const prompts = require('prompts')
 
 const token = process.env.BEARER_TOKEN
@@ -9,15 +9,33 @@ let targetUserName = ''
 let emoji = ''
 
 function main () {
-  console.log('\n')
-  console.log('ーーーーーーーーーーーーーーーーーーーーーーーーーーーー')
-  console.log('| 　　　　　　　　　　　　　　　　　　　　　　　　　　 |')
-  console.log('|　　🐥直近一週間のツイート数を絵文字で表示します🐥　　|')
-  console.log('| 　　　　　　　　　　　　　　　　　　　　　　　　　　 |')
-  console.log('ーーーーーーーーーーーーーーーーーーーーーーーーーーーー')
-  console.log('\n')
-
+  console.log('\n' +
+  'ーーーーーーーーーーーーーーーーーーーーーーーーーーーー \n' +
+  '| 　　　　　　　　　　　　　　　　　　　　　　　　　　 | \n' +
+  '|　　🐥直近一週間のツイート数を絵文字で表示します🐥　　| \n' +
+  '| 　　　　　　　　　　　　　　　　　　　　　　　　　　 | \n' +
+  'ーーーーーーーーーーーーーーーーーーーーーーーーーーーー \n' +
+  '\n')
   getInfo()
+}
+
+async function getInfo () {
+  const question = [
+    {
+      type: 'text',
+      name: 'emoji',
+      message: '好きな絵文字を入力してね'
+    },
+    {
+      type: 'text',
+      name: 'targetUserName',
+      message: '表示したいアカウント名を入力してね（@は不要です）'
+    }
+  ]
+  const response = await prompts(question)
+  emoji = response.emoji
+  targetUserName = response.targetUserName
+  displayTweetCounts()
 }
 
 async function getRequest () {
@@ -43,8 +61,8 @@ async function displayTweetCounts () {
     const response = await getRequest()
     console.log('\n' + '@' + targetUserName + ' の直近一週間のツイート数' + '\n')
     for (let i = 0; i < response.data.length; i++) {
-      const tweetCounts = response.data[i].tweet_count
       const date = DateTime.fromISO(response.data[i].start).setLocale('ja').toISODate()
+      const tweetCounts = response.data[i].tweet_count
       const tweetCountsSign = (tweetCounts === 0) ? '-' : emoji.repeat(tweetCounts)
       process.stdout.write(date + ' ')
       console.log(tweetCountsSign)
@@ -55,25 +73,6 @@ async function displayTweetCounts () {
     process.exit(-1)
   }
   process.exit()
-}
-
-async function getInfo () {
-  const question = [
-    {
-      type: 'text',
-      name: 'emoji',
-      message: '好きな絵文字を入力してね'
-    },
-    {
-      type: 'text',
-      name: 'targetUserName',
-      message: '表示したいアカウント名を入力してね（@は不要です）'
-    }
-  ]
-  const response = await prompts(question)
-  emoji = response.emoji
-  targetUserName = response.targetUserName
-  displayTweetCounts()
 }
 
 main()
