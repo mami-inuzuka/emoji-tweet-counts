@@ -25,7 +25,7 @@ async function getRequest () {
   }
 }
 
-(async () => {
+async function displayTweetCounts () {
   try {
     const response = await getRequest()
     console.log('\n' + '@' + targetUserName + 'のツイート数' + '\n')
@@ -41,4 +41,6 @@ async function getRequest () {
     process.exit(-1)
   }
   process.exit()
-})()
+}
+
+displayTweetCounts()
