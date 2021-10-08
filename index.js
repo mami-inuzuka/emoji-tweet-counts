@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+
+const chalk = require('chalk')
 const { DateTime } = require('luxon')
 const needle = require('needle')
 const prompts = require('prompts')
@@ -16,7 +19,18 @@ function main () {
   '| 　　　　　　　　　　　　　　　　　　　　　　　　　　 | \n' +
   'ーーーーーーーーーーーーーーーーーーーーーーーーーーーー \n' +
   '\n')
-  getInfo()
+  checkToken()
+}
+
+function checkToken () {
+  try {
+    if (!token) {
+      throw new Error('Bearer Tokenを設定してください\n')
+    }
+    getInfo()
+  } catch (error) {
+    console.log(chalk.red(error.message))
+  }
 }
 
 async function getInfo () {
