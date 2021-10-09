@@ -19,7 +19,7 @@
     "twitter",
     "cli"
   ],
-  "author": "inuzuka_mami",
+  "author": "mami-inuzuka",
   "license": "MIT",
   "dependencies": {
     "chalk": "^4.1.2",
