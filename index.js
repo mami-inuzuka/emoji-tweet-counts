@@ -5,13 +5,25 @@ const { DateTime } = require('luxon')
 const needle = require('needle')
 const prompts = require('prompts')
 
-const token = process.env.BEARER_TOKEN
 const endpointUrl = 'https://api.twitter.com/2/tweets/counts/recent'
+const token = process.env.BEARER_TOKEN
 
 let targetUserName = ''
 let emoji = ''
 
 function main () {
+  try {
+    if (!process.env.BEARER_TOKEN) {
+      throw new Error("ターミナルで export BEARER_TOKEN='YOUR-TOKEN' を実行しBearer Tokenを設定してください\n")
+    }
+    showFirstMessage()
+    getInfo()
+  } catch (error) {
+    console.log(chalk.red(error.message))
+  }
+}
+
+function showFirstMessage () {
   console.log('\n' +
   'ーーーーーーーーーーーーーーーーーーーーーーーーーーーー \n' +
   '| 　　　　　　　　　　　　　　　　　　　　　　　　　　 | \n' +
@@ -19,18 +31,6 @@ function main () {
   '| 　　　　　　　　　　　　　　　　　　　　　　　　　　 | \n' +
   'ーーーーーーーーーーーーーーーーーーーーーーーーーーーー \n' +
   '\n')
-  checkToken()
-}
-
-function checkToken () {
-  try {
-    if (!token) {
-      throw new Error('Bearer Tokenを設定してください\n')
-    }
-    getInfo()
-  } catch (error) {
-    console.log(chalk.red(error.message))
-  }
 }
 
 async function getInfo () {
