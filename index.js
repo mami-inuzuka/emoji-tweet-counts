@@ -14,7 +14,7 @@ let emoji = ''
 function main () {
   try {
     if (!process.env.BEARER_TOKEN) {
-      throw new Error("ターミナルで export BEARER_TOKEN='YOUR-TOKEN' を実行しBearer Tokenを設定してください\n")
+      throw new Error("To set environment variables on macOS or Linux, run the export command from the terminal: export BEARER_TOKEN='YOUR-TOKEN' \n")
     }
     showFirstMessage()
     getInfo()
@@ -25,11 +25,11 @@ function main () {
 
 function showFirstMessage () {
   console.log('\n' +
-  'ーーーーーーーーーーーーーーーーーーーーーーーーーーーー \n' +
-  '| 　　　　　　　　　　　　　　　　　　　　　　　　　　 | \n' +
-  '|　　🐥直近一週間のツイート数を絵文字で表示します🐥　　| \n' +
-  '| 　　　　　　　　　　　　　　　　　　　　　　　　　　 | \n' +
-  'ーーーーーーーーーーーーーーーーーーーーーーーーーーーー \n' +
+  ' -------------------------------------------------------- \n' +
+  '|                                                        | \n' +
+  '|    🐥Display tweet counts by emoji this past week!🐥   | \n' +
+  '|                                                        | \n' +
+  ' -------------------------------------------------------- \n' +
   '\n')
 }
 
@@ -38,12 +38,12 @@ async function getInfo () {
     {
       type: 'text',
       name: 'emoji',
-      message: '好きな絵文字を入力してね'
+      message: 'Enter your favorite emoji.'
     },
     {
       type: 'text',
       name: 'targetUserName',
-      message: '表示したいアカウント名を入力してね（@は不要です）'
+      message: 'Enter your screen name (except @).'
     }
   ]
   const response = await prompts(question)
@@ -66,14 +66,14 @@ async function getRequest () {
   if (res.body.data) {
     return res.body
   } else {
-    throw new Error(chalk.red('Bearer Tokenが正しくないか、存在しないユーザー名のためツイート数を取得できませんでした。'))
+    throw new Error(chalk.red('Bearer Token is incorrect. / User is not found.'))
   }
 }
 
 async function displayTweetCounts () {
   try {
     const response = await getRequest()
-    console.log('\n' + '@' + targetUserName + ' の直近一週間のツイート数' + '\n')
+    console.log('\n' + 'Tweet counts of ' + '@' + targetUserName + ' this past week.' + '\n')
     for (let i = 0; i < response.data.length; i++) {
       const date = DateTime.fromISO(response.data[i].start).setLocale('ja').toISODate()
       const tweetCounts = response.data[i].tweet_count
