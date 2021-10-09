@@ -63,10 +63,10 @@ async function getRequest () {
       authorization: `Bearer ${token}`
     }
   })
-  if (res.body) {
+  if (res.body.data) {
     return res.body
   } else {
-    throw new Error('Unsuccessful request')
+    throw new Error(chalk.red('Bearer Tokenが正しくないか、存在しないユーザー名のためツイート数を取得できませんでした。'))
   }
 }
 
