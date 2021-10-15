@@ -46,10 +46,17 @@ async function getInfo () {
       message: 'Enter your screen name (except @).'
     }
   ]
-  const response = await prompts(question)
-  emoji = response.emoji
-  targetUserName = response.targetUserName
-  displayTweetCounts()
+  try {
+    const response = await prompts(question)
+    if (Object.keys(response).length === 0) {
+      throw new Error('プログラムを終了しました')
+    }
+    emoji = response.emoji
+    targetUserName = response.targetUserName
+    displayTweetCounts()
+  } catch (error) {
+    console.log(error.message)
+  }
 }
 
 async function getRequest () {
