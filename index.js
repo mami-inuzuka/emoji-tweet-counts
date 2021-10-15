@@ -64,31 +64,39 @@ async function getRequest () {
     query: 'from:' + targetUserName,
     granularity: 'day'
   }
-  const res = await needle('get', endpointUrl, params, {
-    headers: {
-      'User-Agent': 'v2RecentTweetCountsJS',
-      authorization: `Bearer ${token}`
+  try {
+    const res = await needle('get', endpointUrl, params, {
+      headers: {
+        'User-Agent': 'v2RecentTweetCountsJS',
+        authorization: `Bearer ${token}`
+      }
+    })
+    if (res.body.data) {
+      return res.body
+    } else if (res.statusCode === 401) {
+      throw new Error('Missing or incorrect authentication credentials. Please check your Bearer Token.')
+    } else {
+      throw new Error(res.body.errors[0].message)
     }
-  })
-  if (res.body.data) {
-    return res.body
-  } else {
-    throw new Error(chalk.red('Bearer Token is incorrect. / User is not found.'))
+  } catch (error) {
+    console.log(chalk.red(error.message))
   }
 }
 
 async function displayTweetCounts () {
   try {
     const response = await getRequest()
-    console.log('\n' + 'Tweet counts of ' + '@' + targetUserName + ' this past week.' + '\n')
-    response.data.forEach(function (item) {
-      const date = DateTime.fromISO(item.start).setLocale('ja').toISODate()
-      const tweetCounts = item.tweet_count
-      const tweetCountsSign = (tweetCounts === 0) ? '-' : emoji.repeat(tweetCounts)
-      process.stdout.write(date + ' ')
-      console.log(tweetCountsSign)
-    })
-    console.log('\n')
+    if (response) {
+      console.log('\n' + 'Tweet counts of ' + '@' + targetUserName + ' this past week.' + '\n')
+      response.data.forEach(function (item) {
+        const date = DateTime.fromISO(item.start).setLocale('ja').toISODate()
+        const tweetCounts = item.tweet_count
+        const tweetCountsSign = (tweetCounts === 0) ? '-' : emoji.repeat(tweetCounts)
+        process.stdout.write(date + ' ')
+        console.log(tweetCountsSign)
+      })
+      console.log('\n')
+    }
   } catch (e) {
     console.log(e)
     process.exit(-1)
