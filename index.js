@@ -74,13 +74,13 @@ async function displayTweetCounts () {
   try {
     const response = await getRequest()
     console.log('\n' + 'Tweet counts of ' + '@' + targetUserName + ' this past week.' + '\n')
-    for (let i = 0; i < response.data.length; i++) {
-      const date = DateTime.fromISO(response.data[i].start).setLocale('ja').toISODate()
-      const tweetCounts = response.data[i].tweet_count
+    response.data.forEach(function (item) {
+      const date = DateTime.fromISO(response.data[item].start).setLocale('ja').toISODate()
+      const tweetCounts = response.data[item].tweet_count
       const tweetCountsSign = (tweetCounts === 0) ? '-' : emoji.repeat(tweetCounts)
       process.stdout.write(date + ' ')
       console.log(tweetCountsSign)
-    }
+    })
     console.log('\n')
   } catch (e) {
     console.log(e)
