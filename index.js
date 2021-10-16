@@ -49,7 +49,7 @@ async function getInfo () {
   try {
     const response = await prompts(question)
     if (Object.keys(response).length === 0) {
-      throw new Error('プログラムを終了しました')
+      throw new Error('Program terminated.')
     }
     emoji = response.emoji
     targetUserName = response.targetUserName
